@@ -1,28 +1,28 @@
 using UnityEngine;
 
-public class FFStyleHeadLockSUPER : MonoBehaviour
+public class FFStyleHeadLockPerfect : MonoBehaviour
 {
-    [Header("═══════ 🔥 SIÊU HEADLOCK FF - BAND ACC MODE 🔥 ═══════")]
-    [Tooltip("Kéo VariableJoystick aim vào đây")]
+    [Header("════ FF STYLE HEAD LOCK - CLEAR & BALANCED ════")]
+    [Tooltip("Joystick aim/fire - kéo VariableJoystick vào đây")]
     public VariableJoystick aimJoystick;
 
     public LayerMask enemyLayer;
 
-    public float maxLockDistance = 120f;        // Siêu xa
-    public float lockFOVAngle = 180f;           // Toàn màn hình
-    public float pullUpThreshold = 0.25f;       // Chỉ cần kéo nhẹ là lock
+    public float maxLockDistance = 50f;
+    public float lockFOVAngle = 140f;           // Góc rộng để lock dễ
+    public float pullUpThreshold = 0.2f;        // Kéo lên 50% là bật lock
 
-    [Tooltip("Tốc độ snap SIÊU NHANH - 300-500 là band acc chắc")]
-    public float aimSnapSpeed = 420f;           // 🔥 Siêu mạnh
+    [Tooltip("Tốc độ lia mượt vào đầu (giảm rung/lố)")]
+    public float aimSnapSpeed = 90f;           // 80-120 tùy test
 
-    [Header("Head Offset - Chính xác trán 100%")]
-    [Range(0.85f, 1.05f)] public float headPercent = 0.98f;
-    public float fixedHeadY = 0.35f;
+    [Tooltip("Offset đầu (trán) tự động + fixed")]
+    [Range(0.8f, 1.0f)] public float headPercent = 1f;
+    public float fixedHeadY = 0.28f;
 
-    [Header("Visual Cheat - Để bạn thấy rõ đang hack")]
-    public GameObject crosshairPrefab;          // Prefab vòng đỏ to
+    [Header("Crosshair & Debug - Để thấy rõ lock")]
+    public GameObject crosshairPrefab;          // Kéo prefab crosshair (vòng đỏ) vào
     private Transform crosshairInstance;
-    public Color lockLineColor = Color.magenta; // Siêu nổi
+    public Color lockLineColor = Color.cyan;
 
     private Transform playerRoot;
     private Transform gunTransform;
@@ -32,18 +32,16 @@ public class FFStyleHeadLockSUPER : MonoBehaviour
     {
         playerRoot = transform.root;
 
-        gunTransform = playerRoot.Find("Gun") ?? 
-                       playerRoot.Find("Weapon/Gun") ?? 
-                       playerRoot.Find("MainGun") ?? 
-                       playerRoot.Find("Weapon");
-
+        gunTransform = playerRoot.Find("Gun") ?? playerRoot.Find("Weapon/Gun") ?? playerRoot.Find("MainGun");
         if (gunTransform == null)
-            Debug.LogError("🔥 Gán GunTransform trong Inspector đi bro!");
+        {
+            Debug.LogError("Gán gunTransform trong Inspector (kéo object Gun vào public field nếu thêm)");
+        }
 
+        // Tạo crosshair world-space (nếu có prefab)
         if (crosshairPrefab != null)
         {
             crosshairInstance = Instantiate(crosshairPrefab).transform;
-            crosshairInstance.localScale = Vector3.one * 1.8f; // To hơn
             crosshairInstance.gameObject.SetActive(false);
         }
     }
@@ -54,68 +52,65 @@ public class FFStyleHeadLockSUPER : MonoBehaviour
 
         float v = aimJoystick.Direction.y;
 
-        if (v > pullUpThreshold)           // Chỉ cần kéo nhẹ
+        if (v > pullUpThreshold)
         {
-            SuperLockAndAim();             // 🔥 Hàm siêu lock mới
+            TryLockAndAimHead();
         }
-        else if (v < 0.15f)
+        else if (v < 0.1f)
         {
             lockedHead = null;
-            if (crosshairInstance) crosshairInstance.gameObject.SetActive(false);
+            if (crosshairInstance != null) crosshairInstance.gameObject.SetActive(false);
         }
 
-        // Visual siêu rõ
+        // Visual rõ rệt: line nối + crosshair di chuyển theo điểm đầu
         if (lockedHead != null)
         {
             Vector3 aimPoint = GetHeadAimPoint(lockedHead);
-            Debug.DrawLine(gunTransform.position, aimPoint, lockLineColor, 0.1f);
+            Debug.DrawLine(gunTransform.position, aimPoint, lockLineColor);
 
-            if (crosshairInstance)
+            if (crosshairInstance != null)
             {
-                crosshairInstance.position = aimPoint + Vector3.up * 0.3f;
+                crosshairInstance.position = aimPoint;
                 crosshairInstance.gameObject.SetActive(true);
-                crosshairInstance.LookAt(Camera.main.transform);
-                crosshairInstance.Rotate(0, 0, Time.time * 180f); // Xoay vòng đỏ cho ngầu
+                crosshairInstance.LookAt(Camera.main.transform); // Crosshair luôn hướng camera
             }
         }
     }
 
-    private void SuperLockAndAim()
+    private void TryLockAndAimHead()
     {
-        // Luôn tìm lại mục tiêu mới mỗi frame (đổi siêu nhanh)
+        if (lockedHead != null && Vector3.Distance(gunTransform.position, lockedHead.position) <= maxLockDistance + 5f)
+        {
+            AimToHead(lockedHead);
+            return;
+        }
+
         Collider[] hits = Physics.OverlapSphere(playerRoot.position, maxLockDistance, enemyLayer);
 
         Transform bestHead = null;
-        float bestScore = float.MaxValue;
+        float bestAngle = lockFOVAngle + 1f;
 
-        Vector3 gunPos = gunTransform.position;
         Vector3 gunFwd = gunTransform.forward;
 
         foreach (var hit in hits)
         {
-            Transform head = FindHeadBoneSUPER(hit.transform);
+            Transform head = FindHeadBone(hit.transform);
             if (head == null) continue;
 
             Vector3 aimPt = GetHeadAimPoint(head);
-            Vector3 dirToHead = (aimPt - gunPos).normalized;
-            float dist = Vector3.Distance(gunPos, aimPt);
-            float angle = Vector3.Angle(gunFwd, dirToHead);
+            float angle = Vector3.Angle(gunFwd, (aimPt - gunTransform.position).normalized);
 
-            if (angle > lockFOVAngle) continue;
-
-            // Score siêu thiên vị: góc nhỏ + gần = thắng tuyệt đối
-            float score = angle * 1.0f + dist * 0.3f;
-            if (score < bestScore)
+            if (angle < bestAngle)
             {
-                bestScore = score;
+                bestAngle = angle;
                 bestHead = head;
             }
         }
 
-        if (bestHead != null)
+        if (bestHead != null && bestAngle <= lockFOVAngle)
         {
             lockedHead = bestHead;
-            AimToHeadSUPER(bestHead);   // Snap cực mạnh
+            AimToHead(bestHead);
         }
         else
         {
@@ -123,46 +118,42 @@ public class FFStyleHeadLockSUPER : MonoBehaviour
         }
     }
 
-    private void AimToHeadSUPER(Transform head)
+    private void AimToHead(Transform head)
     {
         Vector3 aimPoint = GetHeadAimPoint(head);
         Vector3 dir = (aimPoint - gunTransform.position).normalized;
         Quaternion targetRot = Quaternion.LookRotation(dir);
 
-        // 🔥 Snap gần như tức thì + không giới hạn
-        gunTransform.rotation = Quaternion.Slerp(gunTransform.rotation, targetRot, aimSnapSpeed * Time.deltaTime * 2f);
-        // Hoặc dùng RotateTowards full tốc độ:
-        // gunTransform.rotation = Quaternion.RotateTowards(gunTransform.rotation, targetRot, 999f);
+        float currentAngle = Vector3.Angle(gunTransform.forward, dir);
+
+        if (currentAngle > 8f) // Chỉ snap nếu chưa gần
+        {
+            gunTransform.rotation = Quaternion.RotateTowards(gunTransform.rotation, targetRot, aimSnapSpeed * Time.deltaTime);
+        }
+        // Không snap khi đã gần → tránh rung/lố
     }
 
     private Vector3 GetHeadAimPoint(Transform headBone)
     {
-        float offset = headBone.lossyScale.y * headPercent + fixedHeadY;
-        return headBone.position + Vector3.up * offset + Random.insideUnitSphere * 0.05f; // rung nhẹ giả tự nhiên
+        float autoOffset = headBone.lossyScale.y * headPercent;
+        return headBone.position + Vector3.up * Mathf.Max(autoOffset, fixedHeadY);
     }
 
-    private Transform FindHeadBoneSUPER(Transform enemy)
+    private Transform FindHeadBone(Transform enemy)
     {
-        // Tìm siêu mạnh - bao quát hầu hết model Free Fire / Unity
-        string[] names = { "Head", "head", "HEAD", "mixamorig:Head", "Bip001 Head", "Head.001", "head_01", "skull", "face", "Neck/Head", "Head_end" };
+        Transform head = enemy.Find("Head") ?? enemy.Find("head") ?? enemy.Find("Neck/Head");
+        if (head != null) return head;
 
-        foreach (string n in names)
-        {
-            Transform t = enemy.Find(n);
-            if (t != null) return t;
-        }
-
-        // Tìm tất cả child
         foreach (Transform t in enemy.GetComponentsInChildren<Transform>())
         {
-            string lower = t.name.ToLower();
-            if (lower.Contains("head") || lower.Contains("skull") || lower.Contains("face") || lower.Contains("neck"))
+            string n = t.name.ToLower();
+            if (n.Contains("head") || n.Contains("skull") || n.Contains("neck/head") || n.Contains("face"))
                 return t;
         }
         return null;
     }
 
-    public void Shoot()   // 🔥 Gọi hàm này khi bắn
+    public void Shoot()
     {
         if (gunTransform == null) return;
 
@@ -170,30 +161,21 @@ public class FFStyleHeadLockSUPER : MonoBehaviour
 
         if (lockedHead != null)
         {
-            Vector3 perfectHead = GetHeadAimPoint(lockedHead);
-            shootDir = (perfectHead - gunTransform.position).normalized;
-            Debug.Log("💀 SIÊU HEADSHOT ACTIVATED - 100% Head!");
+            Vector3 aimPt = GetHeadAimPoint(lockedHead);
+            shootDir = (aimPt - gunTransform.position).normalized;
+            Debug.Log("BẮN VỚI HEAD LOCK - Headshot cao!");
         }
 
-        // Raycast siêu xa + chắc chắn trúng
-        if (Physics.Raycast(gunTransform.position, shootDir, out RaycastHit hit, 300f))
+        // Raycast bắn (thay bằng Instantiate đạn thật nếu cần)
+        if (Physics.Raycast(gunTransform.position, shootDir, out RaycastHit hit, 200f))
         {
-            if (hit.collider.CompareTag("Enemy"))
+            if (hit.collider != null && hit.collider.CompareTag("Enemy"))
             {
-                Debug.Log("🎯 BANG! Headshot confirmed - Enemy chết chắc!");
-                // hit.collider.SendMessage("TakeDamage", 999f, SendMessageOptions.DontRequireReceiver);
+                Debug.Log("Trúng địch! Headshot nếu lock đúng đầu.");
+                // Gọi damage head: hit.collider.SendMessage("TakeDamage", 100f, SendMessageOptions.DontRequireReceiver);
             }
         }
 
-        Debug.DrawRay(gunTransform.position, shootDir * 150f, Color.red, 1f);
-    }
-
-    // Bonus: Hàm bật/tắt siêu mode
-    public void ToggleGodMode(bool on)
-    {
-        aimSnapSpeed = on ? 999f : 80f;
-        maxLockDistance = on ? 200f : 50f;
-        lockFOVAngle = on ? 180f : 90f;
-        Debug.Log(on ? "🔥 GOD HEADLOCK ĐÃ BẬT - Band acc incoming!" : "Đã tắt cheat");
+        Debug.DrawRay(gunTransform.position, shootDir * 100f, Color.red, 0.4f);
     }
 }

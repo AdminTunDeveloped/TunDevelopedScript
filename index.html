@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+l<!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
@@ -55,11 +55,7 @@ border:1px solid #1e293b;
 text-align:left;
 }
 
-.box h3{
-font-size:14px;
-margin-bottom:5px;
-color:#22c55e;
-}
+.box h3{font-size:14px;color:#22c55e}
 
 input{
 width:100%;
@@ -82,6 +78,7 @@ color:white;
 font-family:Montserrat;
 cursor:pointer;
 position:relative;
+z-index:1;
 }
 
 .rgb-btn:before{
@@ -92,7 +89,7 @@ border-radius:12px;
 background:linear-gradient(45deg,#ff0000,#ff7300,#fffb00,#48ff00,#00ffd5,#002bff,#7a00ff,#ff00c8);
 background-size:400%;
 z-index:-1;
-animation:rgbmove 8s linear infinite
+animation:rgbmove 6s linear infinite
 }
 
 @keyframes rgbmove{
@@ -100,7 +97,7 @@ animation:rgbmove 8s linear infinite
 100%{background-position:400%}
 }
 
-.result{margin-top:15px;font-size:14px}
+.result{margin-top:15px}
 .success{color:#22c55e}
 .error{color:#ef4444}
 
@@ -132,12 +129,6 @@ border:1px solid #1e293b;
 font-size:12px;
 text-align:left;
 }
-
-.item{
-margin-top:8px;
-padding:6px;
-border-bottom:1px solid #1e293b;
-}
 </style>
 </head>
 
@@ -148,14 +139,12 @@ border-bottom:1px solid #1e293b;
 
 <div class="title">TUN DEVELOPED</div>
 
-<!-- VIP -->
 <div class="box">
 <h3>💎 KEY VIP</h3>
 <input id="vip-key" placeholder="Nhập KEY VIP">
 <button class="rgb-btn" onclick="vip()">Kích hoạt VIP</button>
 </div>
 
-<!-- FREE -->
 <div class="box">
 <h3>🎁 KEY FREE</h3>
 <input id="free-key" placeholder="Nhập KEY FREE">
@@ -163,7 +152,6 @@ border-bottom:1px solid #1e293b;
 </div>
 
 <div id="result" class="result"></div>
-
 <div id="history" class="history"></div>
 
 </div>
@@ -175,20 +163,44 @@ const CONFIG_URL="https://raw.githubusercontent.com/AdminTunDeveloped/AdminTunDe
 const KEY_URL="https://raw.githubusercontent.com/AdminTunDeveloped/AdminTunDeveloped/main/key.json";
 
 let CONFIG={},KEY_DATA={};
+let loaded=false;
+
 let history=JSON.parse(localStorage.getItem("tun_history"))||[];
 
 async function load(){
+try{
 CONFIG=await (await fetch(CONFIG_URL+"?t="+Date.now())).json();
 KEY_DATA=await (await fetch(KEY_URL+"?t="+Date.now())).json();
+loaded=true;
+}catch(e){
+document.getElementById("result").innerHTML="<div class='error'>❌ Lỗi load server</div>";
+}
 }
 
-function copy(text){
-navigator.clipboard.writeText(text);
-alert("📋 Đã copy");
+function showError(msg){
+document.getElementById("result").innerHTML="<div class='error'>"+msg+"</div>";
 }
 
-function download(link){
-window.location.href = link;
+function showLink(type,link){
+document.getElementById("result").innerHTML=`
+<div class="success">${type}
+
+<div class="linkbox">
+<input value="${link}" readonly>
+<button class="copy" onclick="copy('${link}')">📋 COPY</button>
+<button class="copy" onclick="download('${link}')">📥 TẢI</button>
+</div>
+
+</div>`;
+}
+
+function copy(t){
+navigator.clipboard.writeText(t);
+alert("Đã copy");
+}
+
+function download(l){
+window.location.href=l;
 }
 
 function save(type,link){
@@ -206,57 +218,41 @@ h.innerHTML="📜 Chưa có lịch sử";
 return;
 }
 
-h.innerHTML="<b>📜 Lịch sử tải:</b>"+history.map(i=>`
-<div class="item">
+h.innerHTML="<b>📜 Lịch sử:</b>"+history.map(i=>`
+<div>
 ${i.type} • ${i.time}<br>
-<button class="copy" onclick="copy('${i.link}')">📋 COPY</button>
+<button class="copy" onclick="copy('${i.link}')">COPY</button>
 </div>
 `).join("");
 }
 
-function showLink(type,link){
-document.getElementById("result").innerHTML = `
-<div class="success">
-${type}
-
-<div class="linkbox">
-<input value="${link}" readonly style="width:100%;background:black;color:white;border:none">
-<button class="copy" onclick="copy('${link}')">📋 COPY LINK</button>
-<button class="copy" onclick="download('${link}')">📥 TẢI NGAY</button>
-</div>
-
-</div>
-`;
-}
-
 function vip(){
+if(!loaded)return showError("⏳ Đợi load dữ liệu...");
+
 let k=document.getElementById("vip-key").value.trim();
 
 let f=KEY_DATA.personal_keys.find(x=>x.key===k);
 
-if(!f){
-document.getElementById("result").innerHTML="<div class='error'>❌ Key VIP sai</div>";
-return;
-}
+if(!f)return showError("❌ Key VIP sai");
 
 let link=CONFIG.scripts[f.platform+"_full"];
 
 save("💎 VIP",link);
-showLink("💎 Kích hoạt VIP thành công",link);
+showLink("💎 Thành công",link);
 }
 
 function freeKey(){
+if(!loaded)return showError("⏳ Đợi load dữ liệu...");
+
 let k=document.getElementById("free-key").value.trim();
 
-if(!KEY_DATA.community_keys.includes(k)){
-document.getElementById("result").innerHTML="<div class='error'>❌ Key Free sai</div>";
-return;
-}
+if(!KEY_DATA.community_keys.includes(k))
+return showError("❌ Key Free sai");
 
 let link=CONFIG.scripts.android_free;
 
 save("🎁 FREE",link);
-showLink("🎁 Nhận bản Free thành công",link);
+showLink("🎁 Thành công",link);
 }
 
 load();

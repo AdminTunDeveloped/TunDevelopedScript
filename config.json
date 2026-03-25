@@ -1,11 +1,11 @@
 {
   "scripts": {
-    "android_full": "https://github.com/AdminTunDeveloped/AdminTunDeveloped/releases/download/full-v2.1.3/TUN_Full_Android.apk",
-    "ios_full": "https://github.com/AdminTunDeveloped/AdminTunDeveloped/releases/download/full-v2.1.3/TUN_Full_iOS.ipa",
-    "pc_full": "https://github.com/AdminTunDeveloped/AdminTunDeveloped/releases/download/full-v2.1.3/TUN_Full_PC.exe",
-    
-    "android_free": "https://github.com/AdminTunDeveloped/AdminTunDeveloped/releases/download/free-v2.1.3/TUN_Free_Android.apk",
-    "ios_free": "https://github.com/AdminTunDeveloped/AdminTunDeveloped/releases/download/free-v2.1.3/TUN_Free_iOS.ipa",
-    "pc_free": "https://github.com/AdminTunDeveloped/AdminTunDeveloped/releases/download/free-v2.1.3/TUN_Free_PC.exe"
+    "android_full": "...apk",
+    "ios_full": "...ipa",
+    "pc_full": "...exe",
+
+    "android_free": "...apk",
+    "ios_free": "...ipa",
+    "pc_free": "...exe"
   }
 }

@@ -143,15 +143,25 @@ right:20px;
 width:55px;
 height:55px;
 border-radius:50%;
-background:#00ffcc;
-color:black;
+background:#000;
+color:white;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:22px;
+font-size:20px;
 cursor:pointer;
-box-shadow:0 0 20px #00ffcc;
 z-index:999;
+}
+
+.fab:before{
+content:"";
+position:absolute;
+top:-2px;left:-2px;right:-2px;bottom:-2px;
+border-radius:50%;
+background:linear-gradient(45deg,#ff0000,#ff7300,#fffb00,#48ff00,#00ffd5,#002bff,#7a00ff,#ff00c8);
+background-size:400%;
+z-index:-1;
+animation:rgbmove 6s linear infinite
 }
 
 .contact-menu{
@@ -168,21 +178,27 @@ transition:0.3s;
 z-index:999;
 }
 
-.contact-menu a{
-background:#020617;
+.contact-btn{
 padding:10px 14px;
 border-radius:10px;
+background:#000;
 color:white;
 text-decoration:none;
 font-size:13px;
-border:1px solid #1e293b;
-white-space:nowrap;
+font-family:Montserrat;
+position:relative;
+z-index:1;
 }
 
-.contact-menu a:hover{
-background:#00ffcc;
-color:black;
-transform:scale(1.05);
+.contact-btn:before{
+content:"";
+position:absolute;
+top:-2px;left:-2px;right:-2px;bottom:-2px;
+border-radius:12px;
+background:linear-gradient(45deg,#ff0000,#ff7300,#fffb00,#48ff00,#00ffd5,#002bff,#7a00ff,#ff00c8);
+background-size:400%;
+z-index:-1;
+animation:rgbmove 6s linear infinite
 }
 
 .contact-menu.show{
@@ -222,9 +238,9 @@ transform:translateX(0);
 <div class="fab" onclick="toggleContact()">💬</div>
 
 <div id="contact-menu" class="contact-menu">
-<a href="https://zalo.me/0378099746" target="_blank">💬 Zalo</a>
-<a href="https://t.me/TunDeveloped" target="_blank">📢 Telegram</a>
-<a href="https://facebook.com/" target="_blank">📘 Facebook</a>
+<a class="contact-btn" href="https://zalo.me/0378099746" target="_blank">💬 Zalo</a>
+<a class="contact-btn" href="https://t.me/TunDeveloped" target="_blank">📢 Telegram</a>
+<a class="contact-btn" href="https://facebook.com/" target="_blank">📘 Facebook</a>
 </div>
 
 <script>

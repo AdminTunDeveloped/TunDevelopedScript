@@ -1,248 +1,222 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TUN DEVELOPED SOFTWARE</title>
-    <style>
-        :root {
-            --neon: #00ffcc;
-            --pink: #ff00aa;
-            --dark: #0a0a14;
-            --card: #16213e;
-        }
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #0a0a14, #1a0033);
-            color: var(--neon);
-            background-image: 
-                linear-gradient(rgba(0,255,204,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,255,204,0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
-            padding: 20px;
-            min-height: 100vh;
-        }
-        .container { max-width: 1100px; margin: auto; }
-        header {
-            text-align: center;
-            padding: 40px 0;
-            border-bottom: 4px solid var(--neon);
-            text-shadow: 0 0 20px var(--neon);
-        }
-        h1 { font-size: 3rem; letter-spacing: 3px; }
-        .banner {
-            background: rgba(255,0,170,0.1);
-            text-align: center;
-            padding: 50px 20px;
-            border-radius: 20px;
-            margin: 25px 0;
-            border: 2px solid var(--pink);
-            box-shadow: 0 0 30px rgba(255,0,170,0.3);
-        }
-        .section {
-            background: var(--card);
-            padding: 30px;
-            margin: 25px 0;
-            border-radius: 16px;
-            border: 2px solid rgba(0,255,204,0.2);
-            box-shadow: 0 0 25px rgba(0,255,204,0.1);
-        }
-        input, select {
-            width: 100%;
-            padding: 16px;
-            margin: 12px 0;
-            background: #0a0a14;
-            border: 2px solid var(--neon);
-            color: white;
-            border-radius: 10px;
-            font-size: 16px;
-        }
-        .btn {
-            background: linear-gradient(45deg, var(--neon), #00ccaa);
-            color: #000;
-            border: none;
-            padding: 16px 32px;
-            margin: 10px 5px;
-            font-weight: bold;
-            font-size: 16px;
-            border-radius: 12px;
-            cursor: pointer;
-            box-shadow: 0 0 20px var(--neon);
-            transition: all 0.3s;
-        }
-        .btn:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 0 40px var(--pink);
-        }
-        .result, .history-item {
-            margin-top: 15px;
-            padding: 18px;
-            background: #0a0a14;
-            border-radius: 10px;
-            border-left: 5px solid var(--neon);
-        }
-        .copy-btn {
-            background: #ffaa00;
-            color: #000;
-            padding: 10px 20px;
-            font-size: 14px;
-        }
-        .neon-text { text-shadow: 0 0 10px var(--neon), 0 0 20px var(--pink); }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TUN DEVELOPED</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@600&family=Inter&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+font-family:Inter;
+background:black;
+color:white;
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.main{width:100%;max-width:420px;padding:20px}
+
+.card{
+background:#020617;
+border-radius:18px;
+padding:30px;
+box-shadow:0 0 40px rgba(0,255,150,0.2);
+text-align:center;
+}
+
+.title{
+font-family:Bebas Neue;
+font-size:42px;
+letter-spacing:4px;
+background:linear-gradient(90deg,#ff0000,#ff7300,#fffb00,#48ff00,#00ffd5,#002bff,#7a00ff,#ff00c8);
+background-size:400%;
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+animation:rainbow 6s linear infinite
+}
+
+@keyframes rainbow{
+0%{background-position:0%}
+100%{background-position:400%}
+}
+
+.online{color:#22c55e;font-weight:700}
+
+input,select{
+width:100%;
+padding:14px;
+border-radius:12px;
+margin-top:12px;
+background:#020617;
+border:1px solid #1e293b;
+color:white;
+font-size:14px
+}
+
+.rgb-btn{
+margin-top:12px;
+width:100%;
+padding:14px;
+border-radius:12px;
+border:none;
+background:#000;
+color:white;
+font-family:Montserrat;
+font-weight:600;
+cursor:pointer;
+position:relative;
+z-index:1;
+}
+
+.rgb-btn:before{
+content:"";
+position:absolute;
+top:-2px;left:-2px;right:-2px;bottom:-2px;
+border-radius:14px;
+background:linear-gradient(45deg,#ff0000,#ff7300,#fffb00,#48ff00,#00ffd5,#002bff,#7a00ff,#ff00c8);
+background-size:400%;
+z-index:-1;
+animation:rgbmove 8s linear infinite
+}
+
+@keyframes rgbmove{
+0%{background-position:0}
+100%{background-position:400%}
+}
+
+.success{color:#22c55e;font-weight:700;margin-top:10px}
+.error{color:#ef4444;font-weight:700;margin-top:10px}
+
+.system{
+margin-top:15px;
+font-size:12px;
+color:#94a3b8;
+}
+</style>
 </head>
+
 <body>
-    <div class="container">
-        <header>
-            <h1 class="neon-text">👉 TUN DEVELOPED SOFTWARE</h1>
-            <p>Phần mềm tối ưu game • Giảm lag • Ổn định mạng • Bảo mật cao</p>
-        </header>
 
-        <div class="banner">
-            <h2 class="neon-text">SIÊU PHẨM TỐI ƯU GAME – HIỆU SUẤT ĐỈNH CAO</h2>
-        </div>
+<div class="main">
+<div class="card">
 
-        <!-- UID Trả phí -->
-        <div class="section">
-            <h2>🔐 Kích hoạt UID (Trả phí - 1 thiết bị)</h2>
-            <input type="text" id="uid-input" placeholder="Nhập UID game">
-            <select id="uid-platform">
-                <option value="">Chọn nền tảng</option>
-                <option value="android">Android</option>
-                <option value="ios">iOS</option>
-                <option value="pc">PC</option>
-            </select>
-            <button class="btn" onclick="activateUID()">XÁC NHẬN UID</button>
-            <div id="uid-result" class="result"></div>
-        </div>
+<div class="title">TUN DEVELOPED</div>
+<p>System Status : <span class="online">ONLINE</span></p>
 
-        <!-- KEY Cá nhân (1 thiết bị) -->
-        <div class="section">
-            <h2>🔑 KEY Cá nhân (1 thiết bị - Full)</h2>
-            <input type="text" id="personal-key" placeholder="Nhập KEY cá nhân">
-            <select id="personal-platform">
-                <option value="">Chọn nền tảng</option>
-                <option value="android">Android Full</option>
-                <option value="ios">iOS Full</option>
-                <option value="pc">PC Full</option>
-            </select>
-            <button class="btn" onclick="activatePersonalKey()">KÍCH HOẠT KEY CÁ NHÂN</button>
-            <div id="personal-result" class="result"></div>
-        </div>
+<input id="uid-input" placeholder="Nhập UID">
+<select id="uid-platform">
+<option value="android">Android</option>
+<option value="ios">iOS</option>
+<option value="pc">PC</option>
+</select>
+<button class="rgb-btn" onclick="activateUID()">🚀 UID</button>
 
-        <!-- KEY Cộng đồng -->
-        <div class="section">
-            <h2>🔑 KEY Cộng đồng (Free)</h2>
-            <input type="text" id="community-key" placeholder="Nhập KEY cộng đồng">
-            <button class="btn" onclick="activateCommunityKey()">KÍCH HOẠT KEY CỘNG ĐỒNG</button>
-            <div id="community-result" class="result"></div>
-        </div>
+<input id="personal-key" placeholder="KEY cá nhân">
+<select id="personal-platform">
+<option value="android">Android</option>
+<option value="ios">iOS</option>
+<option value="pc">PC</option>
+</select>
+<button class="rgb-btn" onclick="activatePersonalKey()">💎 VIP</button>
 
-        <!-- Lịch sử & Link tải -->
-        <div class="section">
-            <h2>📜 Lịch sử kích hoạt & Link tải</h2>
-            <div id="history-list"></div>
-            <button class="btn" onclick="clearHistory()" style="background:#ff5555; margin-top:15px;">Xóa toàn bộ lịch sử</button>
-        </div>
-    </div>
+<input id="community-key" placeholder="KEY Free">
+<button class="rgb-btn" onclick="activateCommunityKey()">🎁 FREE</button>
 
-    <script>
-        const CONFIG_URL = "https://raw.githubusercontent.com/AdminTunDeveloped/AdminTunDeveloped/main/config.json";
-        let CONFIG = {};
+<div id="result"></div>
 
-        async function loadConfig() {
-            try {
-                const res = await fetch(CONFIG_URL + "?t=" + Date.now());
-                CONFIG = await res.json();
-            } catch(e) { console.log("Không load config"); }
-        }
+<div class="system">
+⏰ <span id="time"></span><br>
+👥 Online: <span id="users"></span>
+</div>
 
-        let history = JSON.parse(localStorage.getItem("tun_history")) || [];
+</div>
+</div>
 
-        function saveToHistory(type, id, platform, link) {
-            const item = {
-                type: type,
-                id: id,
-                platform: platform,
-                time: new Date().toLocaleString("vi-VN"),
-                link: link
-            };
-            history.unshift(item);
-            if (history.length > 30) history.length = 30;
-            localStorage.setItem("tun_history", JSON.stringify(history));
-            renderHistory();
-        }
+<script>
 
-        function renderHistory() {
-            const list = document.getElementById("history-list");
-            if (history.length === 0) {
-                list.innerHTML = "<p>Chưa có lịch sử kích hoạt nào.</p>";
-                return;
-            }
-            list.innerHTML = history.map(h => `
-                <div class="history-item">
-                    <strong>${h.type}</strong> — ${h.time}<br>
-                    <small>${h.id} | ${h.platform}</small><br><br>
-                    <button class="btn copy-btn" onclick="copyLink('${h.link}')">📋 Sao chép link tải</button>
-                </div>
-            `).join("");
-        }
+const CONFIG_URL = "https://raw.githubusercontent.com/AdminTunDeveloped/AdminTunDeveloped/main/config.json";
+const KEY_URL = "https://raw.githubusercontent.com/AdminTunDeveloped/AdminTunDeveloped/main/key.json";
 
-        function copyLink(link) {
-            if (link === "#") return alert("Link chưa được thiết lập!");
-            navigator.clipboard.writeText(link);
-            alert("✅ Đã sao chép link tải!");
-        }
+let CONFIG = {};
+let KEY_DATA = {};
 
-        function clearHistory() {
-            if (confirm("Xóa hết lịch sử?")) {
-                history = [];
-                localStorage.removeItem("tun_history");
-                renderHistory();
-            }
-        }
+async function loadAll(){
+let c = await fetch(CONFIG_URL+"?t="+Date.now());
+CONFIG = await c.json();
 
-        // ================== KÍCH HOẠT ==================
-        async function activateUID() {
-            const uid = document.getElementById("uid-input").value.trim();
-            const plat = document.getElementById("uid-platform").value;
-            const result = document.getElementById("uid-result");
+let k = await fetch(KEY_URL+"?t="+Date.now());
+KEY_DATA = await k.json();
+}
 
-            if (!uid || !plat) return result.innerHTML = `<p style="color:#ff5555">❌ Nhập UID và chọn nền tảng!</p>`;
+function activateUID(){
+let uid=document.getElementById("uid-input").value;
+let plat=document.getElementById("uid-platform").value;
+let r=document.getElementById("result");
 
-            const link = CONFIG.scripts?.[`${plat}_full`] || "#";
-            result.innerHTML = `<p style="color:lime">✅ UID hợp lệ! Bản Full đã lưu vào lịch sử.</p>`;
-            saveToHistory("UID Trả phí", uid, plat.toUpperCase(), link);
-        }
+if(!uid||!plat){
+r.innerHTML="<div class='error'>❌ Nhập UID</div>";return;
+}
 
-        async function activatePersonalKey() {
-            const key = document.getElementById("personal-key").value.trim();
-            const plat = document.getElementById("personal-platform").value;
-            const result = document.getElementById("personal-result");
+let link=CONFIG.scripts[plat+"_full"];
+r.innerHTML="<div class='success'>✅ UID OK</div>";
 
-            if (!key || !plat) return result.innerHTML = `<p style="color:#ff5555">❌ Nhập KEY và chọn nền tảng!</p>`;
+setTimeout(()=>{window.location.href=link},1000);
+}
 
-            const link = CONFIG.scripts?.[`${plat}_full`] || "#";
-            result.innerHTML = `<p style="color:lime">✅ KEY Cá nhân hợp lệ! Bản Full đã lưu.</p>`;
-            saveToHistory("KEY Cá nhân (1 thiết bị)", key, plat.toUpperCase(), link);
-        }
+function activatePersonalKey(){
+let key=document.getElementById("personal-key").value;
+let plat=document.getElementById("personal-platform").value;
+let r=document.getElementById("result");
 
-        async function activateCommunityKey() {
-            const key = document.getElementById("community-key").value.trim();
-            const result = document.getElementById("community-result");
+let device=navigator.userAgent;
 
-            if (!key) return result.innerHTML = `<p style="color:#ff5555">❌ Nhập KEY cộng đồng!</p>`;
+let found=KEY_DATA.personal_keys.find(x=>x.key===key);
 
-            const link = CONFIG.scripts?.android_free || "#";   // mặc định Android free, bạn chỉnh sau
-            result.innerHTML = `<p style="color:lime">🎉 KEY Cộng đồng hợp lệ! Bản Free đã lưu.</p>`;
-            saveToHistory("KEY Cộng đồng", key, "Free", link);
-        }
+if(!found){r.innerHTML="<div class='error'>❌ Key sai</div>";return;}
 
-        // Khởi chạy
-        window.onload = () => {
-            loadConfig();
-            renderHistory();
-        };
-    </script>
+if(found.platform!==plat){r.innerHTML="<div class='error'>❌ Sai nền tảng</div>";return;}
+
+if(found.device && found.device!==device){
+r.innerHTML="<div class='error'>❌ Key đã dùng</div>";return;
+}
+
+found.device=device;
+
+let link=CONFIG.scripts[plat+"_full"];
+r.innerHTML="<div class='success'>💎 VIP OK</div>";
+
+setTimeout(()=>{window.location.href=link},1000);
+}
+
+function activateCommunityKey(){
+let key=document.getElementById("community-key").value;
+let r=document.getElementById("result");
+
+if(!KEY_DATA.community_keys.includes(key)){
+r.innerHTML="<div class='error'>❌ Key free sai</div>";return;
+}
+
+let link=CONFIG.scripts.android_free;
+r.innerHTML="<div class='success'>🎉 Free OK</div>";
+
+setTimeout(()=>{window.location.href=link},1000);
+}
+
+setInterval(()=>{
+document.getElementById("time").innerText=new Date().toLocaleTimeString()
+},1000)
+
+document.getElementById("users").innerText=Math.floor(Math.random()*500+100)
+
+loadAll();
+
+</script>
+
 </body>
 </html>

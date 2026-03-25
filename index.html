@@ -48,6 +48,12 @@ animation:rainbow 6s linear infinite
 
 .online{color:#22c55e;font-weight:700}
 
+.tag{
+margin-top:6px;
+font-size:12px;
+color:#94a3b8
+}
+
 input,select{
 width:100%;
 padding:14px;
@@ -90,13 +96,33 @@ animation:rgbmove 8s linear infinite
 100%{background-position:400%}
 }
 
-.success{color:#22c55e;font-weight:700;margin-top:10px}
-.error{color:#ef4444;font-weight:700;margin-top:10px}
+.success{color:#22c55e;font-weight:700;margin-top:12px}
+.error{color:#ef4444;font-weight:700;margin-top:12px}
+
+.box{
+margin-top:12px;
+padding:12px;
+background:#020617;
+border-radius:10px;
+border:1px solid #1e293b;
+}
+
+.copy{
+margin-top:10px;
+padding:10px;
+width:100%;
+border-radius:10px;
+border:none;
+background:#111;
+color:white;
+cursor:pointer;
+}
 
 .system{
 margin-top:15px;
 font-size:12px;
 color:#94a3b8;
+line-height:1.6
 }
 </style>
 </head>
@@ -108,31 +134,38 @@ color:#94a3b8;
 
 <div class="title">TUN DEVELOPED</div>
 <p>System Status : <span class="online">ONLINE</span></p>
+<div class="tag">⚡ Hệ thống tối ưu game • Bảo mật • Ổn định • Anti lag</div>
 
-<input id="uid-input" placeholder="Nhập UID">
+<!-- UID -->
+<input id="uid-input" placeholder="Nhập UID của bạn">
 <select id="uid-platform">
 <option value="android">Android</option>
 <option value="ios">iOS</option>
 <option value="pc">PC</option>
 </select>
-<button class="rgb-btn" onclick="activateUID()">🚀 UID</button>
+<button class="rgb-btn" onclick="activateUID()">🚀 KÍCH HOẠT UID</button>
 
-<input id="personal-key" placeholder="KEY cá nhân">
+<!-- VIP -->
+<input id="personal-key" placeholder="Nhập KEY VIP">
 <select id="personal-platform">
-<option value="android">Android</option>
-<option value="ios">iOS</option>
-<option value="pc">PC</option>
+<option value="android">Android Full</option>
+<option value="ios">iOS Full</option>
+<option value="pc">PC Full</option>
 </select>
-<button class="rgb-btn" onclick="activatePersonalKey()">💎 VIP</button>
+<button class="rgb-btn" onclick="activatePersonalKey()">💎 KÍCH HOẠT VIP</button>
 
-<input id="community-key" placeholder="KEY Free">
-<button class="rgb-btn" onclick="activateCommunityKey()">🎁 FREE</button>
+<!-- FREE -->
+<input id="community-key" placeholder="Nhập KEY FREE">
+<button class="rgb-btn" onclick="activateCommunityKey()">🎁 NHẬN BẢN FREE</button>
 
 <div id="result"></div>
 
 <div class="system">
-⏰ <span id="time"></span><br>
-👥 Online: <span id="users"></span>
+🟢 Server: Online<br>
+⏰ Time: <span id="time"></span><br>
+👥 Người dùng: <span id="users"></span><br>
+🔐 Bảo mật: Active<br>
+🚀 Version: v2.1.3
 </div>
 
 </div>
@@ -154,65 +187,89 @@ let k = await fetch(KEY_URL+"?t="+Date.now());
 KEY_DATA = await k.json();
 }
 
+function copyLink(link){
+navigator.clipboard.writeText(link)
+alert("📋 Đã copy link!")
+}
+
+function showResult(type, link, platform){
+document.getElementById("result").innerHTML = `
+<div class='success'>
+${type}<br><br>
+
+<div class="box">
+📥 Link tải:<br>
+<input value="${link}" readonly>
+<button class="copy" onclick="copyLink('${link}')">📋 Sao chép link</button>
+</div>
+
+<div style="margin-top:8px;font-size:12px;color:#94a3b8">
+Thiết bị: ${platform.toUpperCase()}<br>
+Trạng thái: Đã kích hoạt thành công
+</div>
+</div>
+`;
+}
+
 function activateUID(){
 let uid=document.getElementById("uid-input").value;
 let plat=document.getElementById("uid-platform").value;
-let r=document.getElementById("result");
 
 if(!uid||!plat){
-r.innerHTML="<div class='error'>❌ Nhập UID</div>";return;
+document.getElementById("result").innerHTML="<div class='error'>❌ Nhập UID</div>";
+return;
 }
 
 let link=CONFIG.scripts[plat+"_full"];
-r.innerHTML="<div class='success'>✅ UID OK</div>";
-
-setTimeout(()=>{window.location.href=link},1000);
+showResult("🚀 UID Kích hoạt thành công", link, plat);
 }
 
 function activatePersonalKey(){
 let key=document.getElementById("personal-key").value;
 let plat=document.getElementById("personal-platform").value;
-let r=document.getElementById("result");
 
 let device=navigator.userAgent;
 
 let found=KEY_DATA.personal_keys.find(x=>x.key===key);
 
-if(!found){r.innerHTML="<div class='error'>❌ Key sai</div>";return;}
+if(!found){
+document.getElementById("result").innerHTML="<div class='error'>❌ Key sai</div>";
+return;
+}
 
-if(found.platform!==plat){r.innerHTML="<div class='error'>❌ Sai nền tảng</div>";return;}
+if(found.platform!==plat){
+document.getElementById("result").innerHTML="<div class='error'>❌ Sai nền tảng</div>";
+return;
+}
 
 if(found.device && found.device!==device){
-r.innerHTML="<div class='error'>❌ Key đã dùng</div>";return;
+document.getElementById("result").innerHTML="<div class='error'>❌ Key đã được sử dụng</div>";
+return;
 }
 
 found.device=device;
 
 let link=CONFIG.scripts[plat+"_full"];
-r.innerHTML="<div class='success'>💎 VIP OK</div>";
-
-setTimeout(()=>{window.location.href=link},1000);
+showResult("💎 VIP Kích hoạt thành công", link, plat);
 }
 
 function activateCommunityKey(){
 let key=document.getElementById("community-key").value;
-let r=document.getElementById("result");
 
 if(!KEY_DATA.community_keys.includes(key)){
-r.innerHTML="<div class='error'>❌ Key free sai</div>";return;
+document.getElementById("result").innerHTML="<div class='error'>❌ Key free sai</div>";
+return;
 }
 
 let link=CONFIG.scripts.android_free;
-r.innerHTML="<div class='success'>🎉 Free OK</div>";
-
-setTimeout(()=>{window.location.href=link},1000);
+showResult("🎁 Free kích hoạt thành công", link, "android");
 }
 
 setInterval(()=>{
 document.getElementById("time").innerText=new Date().toLocaleTimeString()
 },1000)
 
-document.getElementById("users").innerText=Math.floor(Math.random()*500+100)
+document.getElementById("users").innerText=Math.floor(Math.random()*500+200)
 
 loadAll();
 

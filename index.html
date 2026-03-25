@@ -160,6 +160,10 @@ line-height:1.6
 
 <div id="result"></div>
 
+<!-- LỊCH SỬ -->
+<div id="history" class="system"></div>
+<button class="rgb-btn" onclick="clearHistory()">🗑 XÓA LỊCH SỬ</button>
+
 <div class="system">
 🟢 Server: Online<br>
 ⏰ Time: <span id="time"></span><br>
@@ -178,6 +182,7 @@ const KEY_URL = "https://raw.githubusercontent.com/AdminTunDeveloped/AdminTunDev
 
 let CONFIG = {};
 let KEY_DATA = {};
+let history = JSON.parse(localStorage.getItem("tun_history")) || [];
 
 async function loadAll(){
 let c = await fetch(CONFIG_URL+"?t="+Date.now());
@@ -192,7 +197,44 @@ navigator.clipboard.writeText(link)
 alert("📋 Đã copy link!")
 }
 
+function saveHistory(type, link, platform){
+let item = {
+type, link, platform,
+time: new Date().toLocaleString()
+};
+
+history.unshift(item);
+if(history.length > 10) history.length = 10;
+
+localStorage.setItem("tun_history", JSON.stringify(history));
+renderHistory();
+}
+
+function renderHistory(){
+let box = document.getElementById("history");
+
+if(history.length === 0){
+box.innerHTML = "<br>📜 Chưa có lịch sử";
+return;
+}
+
+box.innerHTML = "<br><b>📜 Lịch sử tải:</b><br>" + history.map(h=>`
+<div style="margin-top:8px;padding:8px;border:1px solid #1e293b;border-radius:8px">
+${h.type}<br>
+<small>${h.time}</small><br>
+<button class="copy" onclick="copyLink('${h.link}')">📋 Copy lại</button>
+</div>
+`).join("");
+}
+
+function clearHistory(){
+localStorage.removeItem("tun_history");
+history=[];
+renderHistory();
+}
+
 function showResult(type, link, platform){
+
 document.getElementById("result").innerHTML = `
 <div class='success'>
 ${type}<br><br>
@@ -209,6 +251,8 @@ Trạng thái: Đã kích hoạt thành công
 </div>
 </div>
 `;
+
+saveHistory(type, link, platform);
 }
 
 function activateUID(){
@@ -272,6 +316,7 @@ document.getElementById("time").innerText=new Date().toLocaleTimeString()
 document.getElementById("users").innerText=Math.floor(Math.random()*500+200)
 
 loadAll();
+renderHistory();
 
 </script>
 

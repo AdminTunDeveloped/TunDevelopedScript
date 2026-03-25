@@ -12,8 +12,8 @@
 
 body{
 font-family:Inter;
-background:black;
-color:white;
+background:#000;
+color:#fff;
 display:flex;
 justify-content:center;
 align-items:center;
@@ -24,71 +24,64 @@ min-height:100vh;
 
 .card{
 background:#020617;
-border-radius:18px;
-padding:25px;
-box-shadow:0 0 40px rgba(0,255,150,0.2);
+border-radius:16px;
+padding:20px;
+box-shadow:0 0 30px rgba(0,255,150,0.2);
 text-align:center;
 }
 
 .title{
 font-family:Bebas Neue;
-font-size:42px;
-letter-spacing:4px;
-background:linear-gradient(90deg,#ff0000,#ff7300,#fffb00,#48ff00,#00ffd5,#002bff,#7a00ff,#ff00c8);
-background-size:400%;
+font-size:38px;
+letter-spacing:3px;
+background:linear-gradient(90deg,#ff0000,#00ffd5,#7a00ff);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
-animation:rainbow 6s linear infinite
-}
-
-@keyframes rainbow{
-0%{background-position:0}
-100%{background-position:400%}
 }
 
 .tag{
+margin-top:8px;
 display:flex;
 flex-wrap:wrap;
 justify-content:center;
 gap:6px;
-font-size:11px;
-color:#94a3b8;
-margin-top:6px;
 }
 
 .tag span{
+font-size:11px;
 background:#020617;
-padding:4px 8px;
+padding:5px 8px;
 border-radius:8px;
 border:1px solid #1e293b;
+color:#94a3b8;
 }
 
 .box{
 margin-top:15px;
-padding:15px;
+padding:14px;
 border-radius:12px;
 background:#020617;
 border:1px solid #1e293b;
 text-align:left;
 }
 
-.box h3{font-size:14px;color:#22c55e}
+.box h3{font-size:13px;color:#22c55e;margin-bottom:6px}
 
 input{
 width:100%;
-padding:12px;
-border-radius:10px;
+padding:11px;
+border-radius:8px;
 border:1px solid #1e293b;
 background:#000;
 color:white;
-margin-top:8px;
+font-size:13px
 }
 
 .rgb-btn{
 margin-top:10px;
 width:100%;
-padding:12px;
-border-radius:10px;
+padding:11px;
+border-radius:8px;
 border:none;
 background:#000;
 color:white;
@@ -102,66 +95,58 @@ z-index:1;
 content:"";
 position:absolute;
 top:-2px;left:-2px;right:-2px;bottom:-2px;
-border-radius:12px;
+border-radius:10px;
 background:linear-gradient(45deg,#ff0000,#ff7300,#fffb00,#48ff00,#00ffd5,#002bff,#7a00ff,#ff00c8);
 background-size:400%;
 z-index:-1;
-animation:rgbmove 6s linear infinite
+animation:rgb 6s linear infinite
 }
 
-@keyframes rgbmove{
+@keyframes rgb{
 0%{background-position:0}
 100%{background-position:400%}
 }
 
-.result{margin-top:15px}
+.result{margin-top:12px;font-size:13px}
 .success{color:#22c55e}
 .error{color:#ef4444}
 
 .linkbox{
-margin-top:10px;
-padding:10px;
+margin-top:8px;
+padding:8px;
 background:#000;
-border-radius:10px;
+border-radius:8px;
 border:1px solid #1e293b;
 }
 
-.copy{
-margin-top:6px;
-padding:8px;
-width:100%;
-border:none;
-border-radius:8px;
-background:#111;
-color:white;
-cursor:pointer;
-}
-
 .history{
-margin-top:15px;
-padding:12px;
-border-radius:12px;
+margin-top:12px;
+padding:10px;
+border-radius:10px;
 background:#020617;
 border:1px solid #1e293b;
 font-size:12px;
 text-align:left;
 }
 
+.history-item{
+margin-top:6px;
+padding:6px;
+border-bottom:1px solid #1e293b;
+}
+
 .fab{
 position:fixed;
 bottom:18px;
 right:18px;
-width:48px;
-height:48px;
+width:45px;
+height:45px;
 border-radius:50%;
 background:#000;
-color:white;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:18px;
 cursor:pointer;
-z-index:999;
 }
 
 .fab:before{
@@ -169,56 +154,48 @@ content:"";
 position:absolute;
 top:-2px;left:-2px;right:-2px;bottom:-2px;
 border-radius:50%;
-background:linear-gradient(45deg,#ff0000,#ff7300,#fffb00,#48ff00,#00ffd5,#002bff,#7a00ff,#ff00c8);
+background:linear-gradient(45deg,#ff0000,#00ffd5,#7a00ff);
 background-size:400%;
+animation:rgb 6s linear infinite;
 z-index:-1;
-animation:rgbmove 6s linear infinite
 }
 
-.contact-menu{
+.menu{
 position:fixed;
-bottom:75px;
+bottom:70px;
 right:18px;
 display:flex;
 flex-direction:column;
-gap:8px;
+gap:6px;
 opacity:0;
 pointer-events:none;
-transform:translateY(10px);
-transition:0.25s;
-z-index:999;
+transition:.2s;
 }
 
-.contact-btn{
-width:140px;
-padding:10px;
-border-radius:10px;
-background:#000;
-color:white;
+.menu a{
+text-decoration:none;
 text-align:center;
 font-size:12px;
-text-decoration:none;
-font-family:Montserrat;
+padding:8px;
+border-radius:8px;
+background:#000;
+color:white;
 position:relative;
-z-index:1;
 }
 
-.contact-btn:before{
+.menu a:before{
 content:"";
 position:absolute;
 top:-2px;left:-2px;right:-2px;bottom:-2px;
-border-radius:12px;
-background:linear-gradient(45deg,#ff0000,#ff7300,#fffb00,#48ff00,#00ffd5,#002bff,#7a00ff,#ff00c8);
+border-radius:10px;
+background:linear-gradient(45deg,#ff0000,#00ffd5,#7a00ff);
 background-size:400%;
+animation:rgb 6s linear infinite;
 z-index:-1;
-animation:rgbmove 6s linear infinite
 }
 
-.contact-menu.show{
-opacity:1;
-pointer-events:auto;
-transform:translateY(0);
-}
+.menu.show{opacity:1;pointer-events:auto}
+
 </style>
 </head>
 
@@ -230,21 +207,21 @@ transform:translateY(0);
 <div class="title">TUN DEVELOPED</div>
 
 <div class="tag">
-<span>🟢 Online</span>
+<span>🟢 Server Online</span>
 <span>🔐 Bảo mật</span>
-<span>🚀 Tối ưu</span>
+<span>🚀 Hiệu suất cao</span>
 </div>
 
 <div class="box">
 <h3>💎 KEY VIP</h3>
-<input id="vip-key" placeholder="Nhập KEY VIP">
-<button class="rgb-btn" onclick="vip()">Kích hoạt VIP</button>
+<input id="vip" placeholder="Nhập KEY VIP">
+<button class="rgb-btn" onclick="vip()">Kích hoạt</button>
 </div>
 
 <div class="box">
 <h3>🎁 KEY FREE</h3>
-<input id="free-key" placeholder="Nhập KEY FREE">
-<button class="rgb-btn" onclick="freeKey()">Nhận bản Free</button>
+<input id="free" placeholder="Nhập KEY FREE">
+<button class="rgb-btn" onclick="freeKey()">Nhận Free</button>
 </div>
 
 <div id="result" class="result"></div>
@@ -253,12 +230,12 @@ transform:translateY(0);
 </div>
 </div>
 
-<div class="fab" onclick="toggleContact()">💬</div>
+<div class="fab" onclick="toggle()">💬</div>
 
-<div id="contact-menu" class="contact-menu">
-<a class="contact-btn" href="https://zalo.me/0378099746" target="_blank">Zalo</a>
-<a class="contact-btn" href="https://t.me/TunDeveloped" target="_blank">Telegram</a>
-<a class="contact-btn" href="https://facebook.com/" target="_blank">Facebook</a>
+<div id="menu" class="menu">
+<a href="#">Zalo</a>
+<a href="#">Telegram</a>
+<a href="#">Facebook</a>
 </div>
 
 <script>
@@ -266,87 +243,78 @@ transform:translateY(0);
 const CONFIG_URL="https://raw.githubusercontent.com/AdminTunDeveloped/TunDev/main/config.json";
 const KEY_URL="https://raw.githubusercontent.com/AdminTunDeveloped/TunDev/main/key.json";
 
-let CONFIG={scripts:{}};
-let KEY_DATA={personal_keys:[],community_keys:[]};
-let LOADED=false;
+let CONFIG={},KEY_DATA={};
+let history=JSON.parse(localStorage.getItem("his"))||[];
 
 async function load(){
-try{
-let c=await fetch(CONFIG_URL);
-CONFIG=await c.json();
-
-let k=await fetch(KEY_URL);
-KEY_DATA=await k.json();
-
-LOADED=true;
-console.log("✅ LOAD OK", CONFIG, KEY_DATA);
-
-}catch(e){
-console.log("❌ LOAD FAIL", e);
-}
+CONFIG=await (await fetch(CONFIG_URL)).json();
+KEY_DATA=await (await fetch(KEY_URL)).json();
 }
 
-function showError(msg){
-document.getElementById("result").innerHTML="<div class='error'>"+msg+"</div>";
+function save(type,link){
+history.unshift({type,link});
+if(history.length>10)history.length=10;
+localStorage.setItem("his",JSON.stringify(history));
+render();
 }
 
-function showLink(type,link){
-document.getElementById("result").innerHTML=`
-<div class="success">${type}
-<div class="linkbox">
-<input value="${link}" readonly>
-<button onclick="copy('${link}')">COPY</button>
-</div>
-</div>`;
+function render(){
+let h=document.getElementById("history");
+if(history.length==0){h.innerHTML="📜 Chưa có lịch sử";return;}
+
+h.innerHTML="<b>📜 Lịch sử:</b>"+history.map((i,idx)=>`
+<div class="history-item">
+${i.type}
+<button class="rgb-btn" onclick="copy('${i.link}')">COPY</button>
+</div>`).join("");
 }
 
 function copy(t){
 navigator.clipboard.writeText(t);
-alert("Đã copy");
+alert("Đã copy link");
+}
+
+function show(type,link){
+document.getElementById("result").innerHTML=`
+<div class="success">${type}
+<div class="linkbox">
+<input value="${link}" readonly>
+<button class="rgb-btn" onclick="copy('${link}')">COPY</button>
+</div>
+</div>`;
 }
 
 function vip(){
-
-if(!LOADED) return showError("⏳ Đang load dữ liệu...");
-
-let k=document.getElementById("vip-key").value.trim();
-if(!k) return showError("❌ Nhập key");
-
-let obj=KEY_DATA.personal_keys.find(x=>x.key===k);
-
-if(!obj){
-console.log("KEY_DATA:", KEY_DATA);
-return showError("❌ Key VIP sai");
-}
+let k=document.getElementById("vip").value.trim();
+let obj=KEY_DATA.personal_keys.find(x=>x.key==k);
+if(!obj) return err("Key sai");
 
 let link=CONFIG.scripts[obj.platform+"_full"];
-
-if(!link) return showError("❌ Config lỗi");
-
-showLink("💎 VIP OK",link);
+save("💎 VIP",link);
+show("Kích hoạt VIP thành công",link);
 }
 
 function freeKey(){
-
-if(!LOADED) return showError("⏳ Đang load dữ liệu...");
-
-let k=document.getElementById("free-key").value.trim();
-if(!k) return showError("❌ Nhập key");
-
-if(!KEY_DATA.community_keys.includes(k)){
-console.log("FREE LIST:", KEY_DATA.community_keys);
-return showError("❌ Key free sai");
-}
+let k=document.getElementById("free").value.trim();
+if(!KEY_DATA.community_keys.includes(k)) return err("Key sai");
 
 let link=CONFIG.scripts.android_free;
-
-showLink("🎁 FREE OK",link);
+save("🎁 FREE",link);
+show("Nhận FREE thành công",link);
 }
 
-function toggleContact(){
-document.getElementById("contact-menu").classList.toggle("show");
+function err(t){
+document.getElementById("result").innerHTML="<div class='error'>"+t+"</div>";
+}
+
+function toggle(){
+document.getElementById("menu").classList.toggle("show");
 }
 
 load();
+render();
 
 </script>
+
+</body>
+</html>

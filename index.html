@@ -136,7 +136,6 @@ font-size:12px;
 text-align:left;
 }
 
-/* FLOAT BUTTON */
 .fab{
 position:fixed;
 bottom:20px;
@@ -157,31 +156,39 @@ z-index:999;
 
 .contact-menu{
 position:fixed;
-bottom:90px;
-right:20px;
+bottom:20px;
+right:80px;
 display:flex;
-flex-direction:column;
+flex-direction:row;
 gap:10px;
 opacity:0;
 pointer-events:none;
-transform:translateY(20px);
+transform:translateX(30px);
 transition:0.3s;
+z-index:999;
 }
 
 .contact-menu a{
 background:#020617;
-padding:10px;
+padding:10px 14px;
 border-radius:10px;
 color:white;
 text-decoration:none;
 font-size:13px;
 border:1px solid #1e293b;
+white-space:nowrap;
+}
+
+.contact-menu a:hover{
+background:#00ffcc;
+color:black;
+transform:scale(1.05);
 }
 
 .contact-menu.show{
 opacity:1;
 pointer-events:auto;
-transform:translateY(0);
+transform:translateX(0);
 }
 </style>
 </head>
@@ -194,14 +201,12 @@ transform:translateY(0);
 <div class="title">TUN DEVELOPED</div>
 <div class="tag">🟢 Server Online • 🔐 Bảo mật • ⚡ Ổn định</div>
 
-<!-- VIP -->
 <div class="box">
 <h3>💎 KEY VIP</h3>
 <input id="vip-key" placeholder="Nhập KEY VIP">
 <button class="rgb-btn" onclick="vip()">Kích hoạt VIP</button>
 </div>
 
-<!-- FREE -->
 <div class="box">
 <h3>🎁 KEY FREE</h3>
 <input id="free-key" placeholder="Nhập KEY FREE">
@@ -214,8 +219,7 @@ transform:translateY(0);
 </div>
 </div>
 
-<!-- CONTACT -->
-<div class="fab" onclick="toggleContact()">☰</div>
+<div class="fab" onclick="toggleContact()">💬</div>
 
 <div id="contact-menu" class="contact-menu">
 <a href="https://zalo.me/0378099746" target="_blank">💬 Zalo</a>
@@ -225,8 +229,8 @@ transform:translateY(0);
 
 <script>
 
-const CONFIG_URL="https://raw.githubusercontent.com/AdminTunDeveloped/REPO/main/config.json";
-const KEY_URL="https://raw.githubusercontent.com/AdminTunDeveloped/REPO/main/key.json";
+const CONFIG_URL="https://raw.githubusercontent.com/USERNAME/REPO/main/config.json";
+const KEY_URL="https://raw.githubusercontent.com/USERNAME/REPO/main/key.json";
 
 let CONFIG={scripts:{}};
 let KEY_DATA={personal_keys:[],community_keys:[]};
@@ -239,9 +243,7 @@ if(c.ok) CONFIG=await c.json();
 
 let k=await fetch(KEY_URL+"?t="+Date.now());
 if(k.ok) KEY_DATA=await k.json();
-}catch(e){
-console.log("Load lỗi");
-}
+}catch(e){}
 }
 
 function showError(msg){
@@ -249,17 +251,15 @@ document.getElementById("result").innerHTML="<div class='error'>"+msg+"</div>";
 }
 
 function showLink(type,link){
-if(!link) return showError("❌ Lỗi config");
+if(!link) return showError("Lỗi config");
 
 document.getElementById("result").innerHTML=`
 <div class="success">${type}
-
 <div class="linkbox">
 <input value="${link}" readonly>
-<button class="copy" onclick="copy('${link}')">📋 COPY</button>
-<button class="copy" onclick="download('${link}')">📥 TẢI</button>
+<button class="copy" onclick="copy('${link}')">COPY</button>
+<button class="copy" onclick="download('${link}')">TẢI</button>
 </div>
-
 </div>`;
 }
 
@@ -283,11 +283,11 @@ function render(){
 let h=document.getElementById("history");
 
 if(history.length===0){
-h.innerHTML="📜 Chưa có lịch sử";
+h.innerHTML="Chưa có lịch sử";
 return;
 }
 
-h.innerHTML="<b>📜 Lịch sử:</b>"+history.map(i=>`
+h.innerHTML="<b>Lịch sử:</b>"+history.map(i=>`
 <div>
 ${i.type} • ${i.time}<br>
 <button class="copy" onclick="copy('${i.link}')">COPY</button>
@@ -297,26 +297,26 @@ ${i.type} • ${i.time}<br>
 
 function vip(){
 let k=document.getElementById("vip-key").value.trim();
-if(!k) return showError("❌ Nhập key");
+if(!k) return showError("Nhập key");
 
 let f=KEY_DATA.personal_keys.find(x=>x.key===k);
-if(!f) return showError("❌ Key VIP sai");
+if(!f) return showError("Key VIP sai");
 
 let link=CONFIG.scripts[f.platform+"_full"];
-save("💎 VIP",link);
-showLink("💎 Thành công",link);
+save("VIP",link);
+showLink("Kích hoạt thành công",link);
 }
 
 function freeKey(){
 let k=document.getElementById("free-key").value.trim();
-if(!k) return showError("❌ Nhập key");
+if(!k) return showError("Nhập key");
 
 if(!KEY_DATA.community_keys.includes(k))
-return showError("❌ Key Free sai");
+return showError("Key Free sai");
 
 let link=CONFIG.scripts.android_free;
-save("🎁 FREE",link);
-showLink("🎁 Thành công",link);
+save("FREE",link);
+showLink("Thành công",link);
 }
 
 function toggleContact(){
